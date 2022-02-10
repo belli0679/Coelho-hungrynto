@@ -18,6 +18,17 @@ var fruty;
 
 var linkgacao;
 
+var fundoground, aguamelon, bunnelho, cuttar;
+
+var coebbit;
+
+
+function preload(){
+  fundoground = loadImage("./Imagens/background.png");
+  aguamelon = loadImage("./Imagens/melon.png");
+  bunnelho = loadImage("./Imagens/Rabbit-01.png");
+}
+
 function setup() 
 {
   createCanvas(500,700);
@@ -26,6 +37,7 @@ function setup()
  
   rectMode(CENTER);
   ellipseMode(RADIUS);
+  imageMode(CENTER);
   textSize(50)
 
   var fruty_options = {
@@ -41,21 +53,39 @@ function setup()
 
   linkgacao = new LinkFruty(corda, fruty);
 
+  coebbit = createSprite(250, 650, 100, 100);
+  coebbit.addImage(bunnelho);
+  coebbit.scale = 0.2;
+
+  cuttar = createImg("./Imagens/cut_button.png");
+  cuttar.position(220, 30);
+  cuttar.size(50, 50);
+  cuttar.mouseClicked(dropar);
+
 }
 
 function draw() 
 {
   background(51);
+  image(fundoground, width/2, height/2, 500, 700);
+
   Engine.update(engine);
    
   ground.moslay();
 
   corda.show();
 
-  ellipse(fruty.position.x, fruty.position.y, 15, 15);
+  image(aguamelon,fruty.position.x, fruty.position.y, 60, 60);
+
+  drawSprites();
 
 }
 
 
+function dropar(){
 
+  corda.break();
+  linkgacao.detachar();
+  linkagacao = null;
 
+}
