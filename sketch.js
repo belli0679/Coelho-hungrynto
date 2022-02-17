@@ -18,13 +18,17 @@ var fruty;
 
 var linkgacao;
 
-var fundoground, aguamelon, bunnelho, cuttar;
+var fundoground, aguamelon, bunnelho, cuttar, mutar;
 
 var coebbit;
 
 var coeblink, coeat;
 
 var sadbbit;
+
+var fundoSound, cortarSound, tristeSound, comendoSound, soproSound;
+
+var blower;
 
 
 function preload(){
@@ -37,6 +41,12 @@ function preload(){
 
   sadbbit = loadAnimation("./Imagens/sad_1.png", "./Imagens/sad_2.png", "./Imagens/sad_3.png");
 
+  fundoSound = loadSound("./Sons/sound1.mp3");
+  cortarSound = loadSound("./Sons/rope cut.mp3");
+  tristeSound = loadSound("./Sons/sad.wav");
+  comendoSound = loadSound("./Sons/eating_sound.mp3");
+  soproSound = loadSound("./Sons/air.wav");
+
   coeblink.playing = true;
   coeat.playing = true;
   coeat.looping = false;
@@ -46,6 +56,8 @@ function preload(){
 function setup() 
 {
   createCanvas(500,700);
+  fundoSound.play();
+  fundoSound.setVolume(0.5);
   engine = Engine.create();
   world = engine.world;
 
@@ -70,7 +82,7 @@ function setup()
 
   linkgacao = new LinkFruty(corda, fruty);
 
-  coebbit = createSprite(250, 620, 100, 100);
+  coebbit = createSprite(420, 620, 100, 100);
   coebbit.addImage(bunnelho);
   coebbit.scale = 0.2;
   coebbit.addAnimation("piscando", coeblink);
@@ -82,6 +94,16 @@ function setup()
   cuttar.position(220, 30);
   cuttar.size(50, 50);
   cuttar.mouseClicked(dropar);
+
+  blower = createImg("./Imagens/balloon.png");
+  blower.position(10, 200);
+  blower.size(150, 100);
+  blower.mouseClicked(soplow);
+
+  mutar = createImg("./Imagens/mute.png");
+  mutar.position(450, 20);
+  mutar.size(50, 50);
+  mutar.mouseClicked(muttar);
 
 }
 
@@ -104,14 +126,22 @@ function draw()
   if(colideu(fruty, coebbit) === true){
 
     coebbit.changeAnimation("comendo");
+    comendoSound.play();
+
   }
 
-  if(colideu(fruty, ground.body) === true){
+  if(colideu(ground.body, fruty) === true){
 
     coebbit.changeAnimation("triste");
+    tristeSound.play();
+    fundoSound.stop();
+
   }
 
   drawSprites();
+
+  /*console.log(fruty.position.y);
+  console.log(ground.body.position.y);*/
 
 }
 
@@ -121,6 +151,8 @@ function dropar(){
   corda.break();
   linkgacao.detachar();
   linkagacao = null;
+
+  cortarSound.play();
 
 }
 
@@ -138,4 +170,25 @@ function colideu(body, sprite){
 
     }
   }
+}
+
+function soplow(){
+
+  Matter.Body.applyForce(fruty, {x: 0, y:0}, {x:0.01, y:0});
+  soproSound.play();
+
+}
+
+function muttar(){
+
+  if(fundoSound.isPlaying()){
+
+    fundoSound.stop();
+
+  }else{
+
+    fundoSound.play();
+    
+  }
+
 }
